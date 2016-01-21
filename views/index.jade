@@ -1,0 +1,51 @@
+extends layout
+block content
+    .div(ng-controller='searchController')
+        h1(align='center') GHStats
+        .row(ng-show="showSearchBar", align='center')
+            .col-xs-offset-3.col-xs-6
+                .input-group.spaced
+                    span.input-group-addon User name
+                    input.form-control(type='text', placeholder='Enter terms to search a user', ng-model='searchString')
+                    span.input-group-btn
+                        button.btn.btn-primary(type='button', ng-click='searchUser()') Search user
+
+        table.table.table-hover(style="width:75%", ng-show='showListUsers', align='center')
+            thead
+                tr
+                    th Avatar
+                    th Login
+                    th Github Page
+                    th Score
+            tbody(ng-repeat='user in foundUsers')
+                tr.user(ng-click="getUser(user)")
+                    td
+                        img(style="width:50px",src="{{user.avatar}}")
+                    td(style="vertical-align:middle") {{ user.login }}
+                    td(style="vertical-align:middle")
+                        a(href="{{ user.page }}") {{ user.page }}
+                    td(style="vertical-align:middle") {{ user.score }}
+
+        .div(ng-show="showStats")
+            .col-xs-offset-2.spaced
+                span.btn.btn-primary.btn-form(role='button', align='left', ng-click="back()") Back
+
+            table.table.table-hover(style="width:50%", align='center')
+                tr.user
+                    td
+                        img(style="width:50px",src="{{currentAvatar}}")
+                    td(style="vertical-align:middle") {{currentUser}}
+                    td(style="vertical-align:middle")
+                        a(href="{{currentPage}}") {{currentPage}}
+                    td(style="vertical-align:middle") {{currentScore}}
+
+            .div(align='center')
+                .div(style="width:50%")
+                    canvas.chart.chart-bar(chart-data='barChartData', chart-labels='barChartLabels')
+                .row.spaced
+                    .col-xs-offset-3.col-xs-2
+                        canvas.chart.chart-pie(chart-data='pieChartIssuesData', chart-labels='pieChartIssuesLabels')
+                    .col-xs-2
+                        canvas.chart.chart-pie(chart-data='pieChartPagesData', chart-labels='pieChartPagesLabels')
+                    .col-xs-2
+                        canvas.chart.chart-pie(chart-data='pieChartWikiData', chart-labels='pieChartWikiLabels')
